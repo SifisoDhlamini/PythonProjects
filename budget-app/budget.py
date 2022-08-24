@@ -42,37 +42,7 @@ class Category:
 
 
 def create_spend_chart(categories):
-    width = len(categories) * 3 + 5
-    longest_word = max(len(category.name) for category in categories)
-    height = 12 + longest_word
-    percentages = {"100": "", "90": "", "80": "", "70": "", "60": "",
-                   "50": "", "40": "", "30": "", "20": "", "10": "", "0": ""}
-    for category in categories:
-        percentage = calc_percentage(category)
-        while int(percentage) >= 0:
-            percentages[percentage] += " o "
-            percentage = str(int(percentage) - 10)
-
-    divider = ("-" * (width - 4) + "\n").rjust(width + 1)
-
-    header = f"Percentage spent by category\n"
-    names = []
-    for i in range(0, longest_word):
-        name = " " * 5
-        for category in categories:
-            if i < len(category.name):
-                name += category.name[i] + "  "
-            else:
-                name += "   "
-        names.append(name)
-    names = "\n".join(names)
-    chart = []
-    for percentage in percentages:
-        prefix = f"{percentage}".rjust(3)
-        postfix = f"{percentages[percentage]}".ljust(width - 4)
-        chart.append(f"{prefix}|{postfix}")
-    chart = "\n".join(chart)
-    return header + chart + '\n' + divider + names
+    ...
 
 
 def greater_than_zero(entry):
@@ -86,4 +56,4 @@ def calc_percentage(category):
             total_deposited += transaction["amount"]
     total_spent = total_deposited - category.get_balance()
     percentage = total_spent / total_deposited * 100
-    return str(int((percentage // 10) * 10))
+    return int((percentage // 10) * 10)
