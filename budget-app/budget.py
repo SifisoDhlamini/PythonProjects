@@ -53,7 +53,8 @@ def create_spend_chart(categories):
             percentages[percentage] += " o "
             percentage = str(int(percentage) - 10)
 
-    divider = ("-" * (width - 5) + "\n").rjust(width)
+    divider = ("-" * (width - 4) + "\n").rjust(width + 1)
+
     header = f"Percentage spent by category\n"
     names = []
     for i in range(0, longest_word):
