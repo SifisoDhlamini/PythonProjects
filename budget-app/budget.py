@@ -42,18 +42,18 @@ class Category:
 
 
 def create_spend_chart(categories):
-    width = len(categories) * 3
+    width = len(categories) * 3 + 5
     longest_word = max(len(category.name) for category in categories)
-    height = 11 + 1 + longest_word
+    height = 12 + longest_word
     percentages = {"100": "", "90": "", "80": "", "70": "", "60": "",
                    "50": "", "40": "", "30": "", "20": "", "10": "", "0": ""}
     for category in categories:
         percentage = calc_percentage(category)
-        while percentage in percentages:
-            percentages[percentage] += "o  "
+        while int(percentage) >= 0:
+            percentages[percentage] += " o "
             percentage = str(int(percentage) - 10)
 
-    divider = ("-" * (width - 4) + "\n").rjust(width)
+    divider = ("-" * (width - 5) + "\n").rjust(width)
     header = f"Percentage spent by category\n"
     names = []
     for i in range(0, longest_word):
@@ -68,8 +68,8 @@ def create_spend_chart(categories):
     chart = []
     for percentage in percentages:
         prefix = f"{percentage}".rjust(3)
-        postfix = f"{percentages[percentage]}".ljust(width, " ")
-        chart.append(f"{prefix}| {postfix}")
+        postfix = f"{percentages[percentage]}".ljust(width - 4)
+        chart.append(f"{prefix}|{postfix}")
     chart = "\n".join(chart)
     return header + chart + '\n' + divider + names
 
