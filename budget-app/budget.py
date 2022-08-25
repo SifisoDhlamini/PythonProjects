@@ -42,18 +42,50 @@ class Category:
 
 
 def create_spend_chart(categories):
-    ...
+    chart = "Percentage spent by category\n"
+    percentages = range(100, -10, -10)
+    total_spending = 0
+    spendings = {}
+    for category in categories:
+        spent = 0
+        cat_name = category.name
+        for entry in category.ledger:
+            if entry["amount"] < 0:
+                spent += abs(entry["amount"])
+        spendings[cat_name] = spent
+        total_spending += spent
+    spent_percentages ={}
+    for cat_name, spent in spendings.items():
+        percentage = spent / total_spending * 100
+        spent_percentages[cat_name] = percentage
+
+    for percentage in percentages:
+        chart += f"{percentage}".rjust(3) + "| "
+        for category in categories:
+            if spent_percentages[category.name] >= percentage:
+                chart += "o  "
+            else:
+                chart += "   "
+        chart += "\n"
+
+    width = len(categories) * 3 + 5
+    divider = ("-" * (width - 4)).rjust(width)
+    chart += divider + "\n"
+
+    names = []
+    longest_name_length = max(len(category.name) for category in categories)
+    for i in range(0, longest_name_length):
+        name = " " * 5
+        for category in categories:
+            if i < len(category.name):
+                name += category.name[i] + "  "
+            else:
+                name += "   "
+        names.append(name)
+    names = "\n".join(names)
+    chart += names
+    return chart
+
+    
 
 
-def greater_than_zero(entry):
-    return entry["amount"] > 0
-
-
-def calc_percentage(category):
-    total_deposited = 0
-    for transaction in category.ledger:
-        if transaction["amount"] > 0:
-            total_deposited += transaction["amount"]
-    total_spent = total_deposited - category.get_balance()
-    percentage = total_spent / total_deposited * 100
-    return int((percentage // 10) * 10)
